@@ -1,0 +1,49 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+using namespace std;
+
+const long long INF = 20000000000LL;
+
+int main() {   //сколько компонент связности??
+    ifstream in;
+    ofstream out;
+    in.open("C:\\Users\\808648\\Desktop\\Algorithmlab2\\taskD\\pathbge1.in", ios::in);
+    out.open("pathbge1.out", ios::out);
+    int n, m;
+    in >> n >> m;
+    vector<vector<int>> list(n + 1);
+    vector<long long> min(n + 1, INF);
+    vector<bool> used(n + 1, false);
+    for (int i = 0; i < m; i++) {
+        int u, v;
+        in >> u >> v;
+        list[u].push_back(v);
+        list[v].push_back(u);
+    }
+    int reached = n;
+    int v = 1;
+    min[1] = 0;
+    pair<long long, int> nextV;
+    while (reached != 0) {
+        nextV.first = INF;
+        for (int i = 0; i < list[v].size(); i++) {
+            if (min[v] + 1 < min[list[v][i]]) {
+                min[list[v][i]] = min[v] + 1;
+                if (min[list[v][i]] < nextV.first ) {
+                    nextV.first = min[list[v][i]];
+                    nextV.second = list[v][i];
+                }
+            }
+        }
+        used[v] = true;
+        v = nextV.second;
+        reached -= 1;
+    }
+    for (int i = 1; i <= n; i++) {
+        cout << min[i] << endl;
+    }
+
+
+    return 0;
+}
