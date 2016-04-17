@@ -1,0 +1,84 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int parent[20002];
+
+int rang[20002];
+int n, m;
+
+struct Edge{
+    int first;
+    int second;
+    int weight;
+
+};
+
+bool sortByWeight(const Edge &lhs, const Edge &rhs) { return lhs.weight < rhs.weight; }
+
+void make_set(int v) {
+    parent[v] = v;
+    rang[v] = 0;
+}
+
+int find_set(int v) {
+    if (v == parent[v]){
+        return v;
+    }
+    return parent[v] = find_set(parent[v]);
+}
+
+void union_set(int a, int b) {
+    a = find_set(a);
+    b = find_set(b);
+    if (a != b) {
+        if (rang[a] < rang[b]) {
+            swap(a, b);
+        }
+        parent[b] = a;
+        if (rang[a] == rang[b]) {
+            ++rang[a];
+        }
+    }
+}
+
+int MST_Kruskal(vector<Edge*> edges) {
+    int ans = 0;
+    for (int i = 1; i <= n; i++) {
+        make_set(i);
+    }
+    sort(edges.begin(), edges.end());
+}
+
+
+int main() {
+    ifstream in;
+    ofstream out;
+    in.open("C:\\Users\\808648\\Desktop\\Algorithmlab2\\taskB\\spantree2.in", ios::in);
+    out.open("spantree2.out", ios::out);
+
+    in >> n >> m;
+    vector<Edge*> edges;
+    for (int i = 1; i <= n; i++) {
+        Edge* edge;
+        edge = new Edge;
+        in >> edge->first >> edge->second >> edge->weight;
+        edges.push_back(edge);
+    }
+    vector<int> q = {5 , 4 , 2, 1, 8};
+    sort(q.begin(),q.end() );
+    for (int i = 0; i < 5; i++) {
+        cout << q[i] << " ";
+    }
+    cout << endl;
+    sort(edges.begin(), edges.end(), sortByWeight);
+    for (int i = 0; i < edges.size(); i++) {
+        int e = edges[i]->weight;
+        cout << e << " ";
+        cout << edges[i]->weight << " ::";
+    }
+    return 0;
+}
